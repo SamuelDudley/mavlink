@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+<mavlink>
+  <!-- Messages for FlightComputer project                        -->
+  <!-- githublink                                                 -->
+  <!-- Samuel Dudley contact info:                                -->
+  <!-- email contact: dudley.samuel@gmail.com                     -->
+  <!-- mavlink ID range: 12000 - 12099                            -->
+  <enums>
+    <enum name="RF_SENSOR_TYPE">
+      <description>Sensor type encoding</description>
+      <entry value="0" name="UNKNOWN"/>
+      <entry value="1" name="USRP_B"/>
+      <entry value="2" name="USRP_X"/>
+      <entry value="3" name="WIFI"/>
+      <entry value="4" name="RF_EXPLORER"/>
+    </enum>
+    <enum name="ORB_SLAM_TRACKING_STATE">
+      <description>Tracking state of ORB-SLAM2 estimator</description>
+      <entry value="0" name="SYSTEM_NOT_READY"/>
+      <entry value="1" name="NO_IMAGES_YET"/>
+      <entry value="2" name="NOT_INITIALIZED"/>
+      <entry value="3" name="OKAY"/>
+      <entry value="4" name="LOST"/>
+    </enum>
+    <enum name="NET_IF_STATUS">
+      <description>Network interface status</description>
+      <entry value="0" name="INTERFACE_UNKNOWN"/>
+      <entry value="1" name="INTERFACE_UP"/>
+      <entry value="2" name="INTERFACE_DOWN"/>
+    </enum>
+    <enum name="WIFI_MODE">
+      <description>Wireless interface mode of operation</description>
+      <entry value="0" name="UNKNOWN_MODE"/>
+      <entry value="1" name="AP_MODE"/>
+      <entry value="2" name="CLIENT_MODE"/>
+      <entry value="3" name="MONITOR_MODE"/>
+    </enum>
+    <enum name="PROCESS_STATUS">
+      <description>Status of a process</description>
+      <entry value="0" name="STATUS_UNKNOWN"/>
+      <entry value="1" name="STATUS_RUNNING"/>
+      <entry value="2" name="STATUS_SLEEPING"/>
+      <entry value="3" name="STATUS_DISK_SLEEP"/>
+      <entry value="4" name="STATUS_STOPPED"/>
+      <entry value="5" name="STATUS_TRACING_STOP"/>
+      <entry value="6" name="STATUS_ZOMBIE"/>
+      <entry value="7" name="STATUS_DEAD"/>
+      <entry value="8" name="STATUS_WAKE_KILL"/>
+      <entry value="9" name="STATUS_WAKING"/>
+      <entry value="10" name="STATUS_IDLE"/>
+      <entry value="11" name="STATUS_LOCKED"/>
+      <entry value="12" name="STATUS_WAITING"/>
+      <entry value="13" name="STATUS_SUSPENDED"/>
+    </enum>
+    <enum name="PROCESS_SIGNAL">
+      <description>Signal to control a process</description>
+      <entry value="0" name="SIGNAL_STOP"/> <!-- SIGSTOP -->
+      <entry value="1" name="SIGNAL_CONTINUE"/> <!-- SIGCONT -->
+      <entry value="2" name="SIGNAL_TERMINATE"/> <!-- SIGTERM -->
+      <entry value="3" name="SIGNAL_KILL"/> <!-- SIGKILL -->
+    </enum>
+  </enums>
+  <messages>
+    <message id="12000" name="RF_DATA_1_CHANNEL">
+      <description>Single channel RF data from a USRP, WIFI dongle, etc...</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="uint8_t" name="sensor_type" enum="RF_SENSOR_TYPE">RF sensor type. See RF_SENSOR_TYPE enum</field>
+      <field type="uint32_t" name="identifier">Identifier of sensor that generated the data</field>
+      <field type="uint64_t" name="sample_time">Timestamp of sample</field>
+      <field type="float" name="magnitude">Magnitude</field>
+      <field type="float" name="phase">Phase</field>
+      <field type="float" name="frequency">Frequency</field>
+      <field type="float" name="gain">Gain</field>
+      <field type="float" name="bandwith">Bandwith</field>
+      <field type="float" name="sample_rate">Sample rate</field>
+    </message>
+    <message id="12001" name="RF_DATA_4_CHANNEL">
+      <description>Four channel RF data from a USRP, WIFI dongle, etc...</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="uint8_t" name="sensor_type" enum="RF_SENSOR_TYPE">RF sensor type. See RF_SENSOR_TYPE enum</field>
+      <field type="uint32_t" name="identifier">Identifier of sensor that generated the data</field>
+      <field type="uint64_t" name="sample_time">Timestamp of sample</field>
+      <field type="float[4]" name="magnitude">Magnitude</field>
+      <field type="float[4]" name="phase">Phase</field>
+      <field type="float[4]" name="frequency">Frequency</field>
+      <field type="float[4]" name="gain">Gain</field>
+      <field type="float[4]" name="bandwith">Bandwith</field>
+      <field type="float[4]" name="sample_rate">Sample rate</field>
+    </message>
+    <message id="12009" name="MACHINE_VISION_FEEDBACK">
+      <description>Report frame capture of machine vision camera</description>
+      <field type="uint8_t" name="target_system">System ID of companion computer</field>
+      <field type="uint64_t" name="cc_time_stamp">Companion computer time since boot (us)</field>
+      <field type="uint64_t" name="ap_time_stamp">Autopilot frame capture time (us)</field>
+      <field type="uint32_t" name="frame_count">Current frame number in processing sequence</field>
+    </message>
+    <message id="12010" name="ORB_SLAM_STATUS">
+      <description>Reports status of ORB-SLAM process</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="uint8_t" name="tracking_state" enum="ORB_SLAM_TRACKING_STATE">Current tracking state. See ORB_SLAM_TRACKING_STATE enum</field>
+      <field type="uint32_t" name="frame_count">Current frame number in processing sequence</field>
+      <field type="uint32_t" name="last_proc_time">Time taken to process the last frame</field>
+      <field type="uint32_t" name="tracked_points">Number of tracked points in the last frame</field>
+    </message>
+    <message id="12020" name="CC_PROCESSING_STATUS">
+      <description>Reports processing status of companion computer</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="float" name="ave_time">Time used to generate average values (s)</field>
+      <field type="uint8_t" name="ave_cpu">Average system CPU usage rounded to the nearest whole percentage [0-100]</field>
+      <field type="uint8_t" name="ave_gpu">Average system GPU usage rounded to the nearest whole percentage [0-100]</field>
+      <field type="uint8_t" name="ave_ram">Average system RAM usage rounded to the nearest whole percentage [0-100]</field>
+      <field type="uint8_t" name="ave_swap">Average system SWAP usage rounded to the nearest whole percentage [0-100]</field>
+    </message>
+    <message id="12021" name="CC_NET_IF_STATUS">
+      <description>Reports status of a network interface</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="char[10]" name="if_name">Interface name e.g.: wlan0, eth0, lo, etc...</field>
+      <field type="uint8_t" name="if_status" enum="INTERFACE_STATUS">Interface status. See NET_IF_STATUS enum</field>
+      <field type="uint64_t" name="bytes_sent">Number of bytes sent on this interface</field>
+      <field type="uint64_t" name="bytes_recv">Number of bytes received on this interface</field>
+      <field type="uint64_t" name="packets_sent">Number of packets sent on this interface</field>
+      <field type="uint64_t" name="packets_recv">Number of packets received on this interface</field>
+    </message>
+    <message id="12022" name="CC_NET_IF_STATUS_EXTRA">
+      <description>Reports status of a network interface</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="char[10]" name="if_name">Interface name e.g.: wlan0, eth0, lo, etc...</field>
+      <field type="uint8_t" name="if_status" enum="INTERFACE_STATUS">Interface status. See NET_IF_STATUS enum</field>
+      <field type="uint64_t" name="error_in">Total number of errors while receiving on this interface</field>
+      <field type="uint64_t" name="error_out">Total number of errors while sending on this interface</field>
+      <field type="uint64_t" name="drop_in">Total number of dropped incoming packets on this interface</field>
+      <field type="uint64_t" name="drop_out">Total number of dropped outgoing packets on this interface</field>
+    </message>
+    <!-- <message id="12023" name="CC_NET_IF_CONTROL"> msg to bring interface up / down & set ip / subnet -->
+    <message id="12024" name="CC_DISK_CAPACITY">
+      <description>Reports disk usage at a path</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="char[10]" name="path_name">Path descriptor used to generate values</field>
+      <field type="uint64_t" name="total_bytes">Total number of bytes for this path</field>
+      <field type="uint64_t" name="used_bytes">Total number of used bytes for this path</field>
+      <field type="uint64_t" name="free_bytes">Total number of free bytes for this path</field>
+    </message>
+    <message id="12025" name="CC_PROCESS_STATUS">
+      <description>Reports status and usage statistics for a process</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="char[10]" name="process_name">Name of the process</field>
+      <field type="uint32_t" name="process_PID">PID value of the process</field>
+      <field type="uint8_t" name="process_status" enum="PROCESS_STATUS">Current process status. See PROCESS_STATUS enum</field>
+      <field type="float" name="ave_time">Time used to generate average values (seconds)</field>
+      <field type="uint8_t" name="ave_cpu">Average CPU usage by process rounded to the nearest whole percentage [0-100]</field>
+      <field type="uint8_t" name="ave_ram">Average RAM usage by process rounded to the nearest whole percentage [0-100]</field>
+      <field type="uint8_t" name="ave_swap">Average SWAP usage by process rounded to the nearest whole percentage [0-100]</field>
+      <field type="uint8_t" name="conn_count">Number of socket connections currently opened by this process</field>
+      <field type="uint8_t" name="fd_count">Number of file descriptors currently opened by this process</field>
+      <field type="uint8_t" name="file_count">Number of files currently opened by this process</field>
+      <field type="uint8_t" name="thread_count">Number of threads currently opened by this process</field>
+      <field type="uint8_t" name="children_count">Number of children processes currently opened by this process</field>
+    </message>
+    <message id="12026" name="CC_SIGNAL_PROCESS">
+      <!-- Very low level control to shut down a misbehaving process on a companion computer. With great power comes great responsibility :) -->
+      <description>Send a signal to a process running on a companion computer</description>
+      <field type="uint8_t" name="target_system">target system ID</field>
+      <field type="uint8_t" name="target_component">target component ID</field>
+      <field type="uint64_t" name="time_stamp">Timestamp of the request (us)</field>
+      <field type="uint32_t" name="target_pid">target PID value of the process to send the signal</field>
+      <field type="uint8_t" name="process_signal" enum="PROCESS_SIGNAL">Signal to send to the process. See PROCESS_SIGNAL enum</field>
+    </message>
+    <message id="12027" name="CC_CPU_STATUS">
+      <description>Reports CPU status of companion computer</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="float" name="ave_time">Time used to generate average values (seconds)</field>
+      <field type="uint8_t" name="core_count">Total number of CPU cores</field>
+      <field type="uint8_t" name="id">ID of CPU measurements. 0:CPU No. 1-2, 1:CPU No. 3-4, etc...</field>
+      <field type="float[2]" name="ave_usage">Average system CPU usage reported per core rounded to the nearest whole percentage [0-100]</field>
+      <field type="float[2]" name="freq">CPU frequency reported per core (MHz)</field>
+      <field type="float[2]" name="temp_c">System CPU temperature reported per core (degrees celsius). -1 if not supported</field>
+    </message>
+    <message id="12028" name="CC_WIFI_IF_STATUS">
+      <description>Reports status of a wireless interface</description>
+      <field type="uint64_t" name="time_stamp">Companion computer time since boot (us)</field>
+      <field type="char[10]" name="if_name">Interface name e.g.: wlan0, etc...</field>
+      <field type="uint8_t" name="if_status" enum="INTERFACE_STATUS">Wireless interface status. See NET_IF_STATUS enum</field>
+      <field type="uint8_t" name="if_mode" enum="WIFI_MODE">Interface operational mode. See WIFI_MODE enum</field>
+      <field type="uint8_t" name="conn_count">Number of active connections on the wireless interface</field>
+      <field type="uint8_t" name="dev_count">Number of devices seen by the wireless interface</field>
+      <!-- report b,a,g,n,ac,etc.. useful? -->
+      <!-- report ssid here or request it directly for (weak) security reasons-->
+    </message> 
+    <message id="12029" name="CC_DESCRIPTOR">
+      <description>
+      Used to assign / report a descriptor for a string.
+      This message can be used to assign or report a unique 10 character descriptor which represents a string up to 235 characters long.
+      </description>
+      <field type="uint8_t" name="target_system">target system ID</field>
+      <field type="uint8_t" name="target_component">target component ID</field>
+      <field type="uint64_t" name="time_stamp">Timestamp of the request (us)</field>
+      <field type="char[10]" name="str_des">The descriptor used to represent the string</field>
+      <field type="char[235]" name="str_val">The string represented by the descriptor</field>
+    </message>
+    <!-- <message id="12030" name="CC_RAM_STATUS"> -->
+    <!-- <message id="12031" name="CC_SWAP_STATUS"> -->
+    <!-- <message id="12032" name="CC_GPU_STATUS"> -->
+  </messages>
+</mavlink>
