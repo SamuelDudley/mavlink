@@ -117,5 +117,28 @@
       <description>Transceiver heartbeat with health report (updated every 10s)</description>
       <field type="uint8_t" name="rfHealth" enum="UAVIONIX_ADSB_RF_HEALTH" display="bitmask">ADS-B transponder messages</field>
     </message>
+    <message id="10999" name="CAMERA_FEEDBACK_AHRS">
+      <description>Camera feedback that is synchronised with AHRS data</description>
+      <field type="uint8_t" name="target_component">Component ID</field>
+      <field type="uint16_t" name="img_idx">Image index</field>
+      <field type="uint64_t" name="trigger_time" units="us">Autopilot time when the feedback event occured</field>
+      <field type="uint64_t" name="sample_time" units="us">Autopilot time when the AHRS data was sampled</field>
+      <field type="float" name="x" units="m">X Position</field>
+      <field type="float" name="y" units="m">Y Position</field>
+      <field type="float" name="z" units="m">Z Position</field>
+      <field type="float" name="vx" units="m/s">X Speed</field>
+      <field type="float" name="vy" units="m/s">Y Speed</field>
+      <field type="float" name="vz" units="m/s">Z Speed</field>
+      <field type="float" name="q1">Quaternion component 1, w (1 in null-rotation)</field>
+      <field type="float" name="q2">Quaternion component 2, x (0 in null-rotation)</field>
+      <field type="float" name="q3">Quaternion component 3, y (0 in null-rotation)</field>
+      <field type="float" name="q4">Quaternion component 4, z (0 in null-rotation)</field>
+      <field type="int32_t" name="lat" units="degE7">Latitude, expressed as degrees * 1E7</field>
+      <field type="int32_t" name="lon" units="degE7">Longitude, expressed as degrees * 1E7</field>
+      <field type="int32_t" name="alt" units="mm">Altitude in meters, expressed as * 1000 (millimeters), AMSL (not WGS84 - note that virtually all GPS modules provide the AMSL as well)</field>
+      <field type="int32_t" name="home_lat" units="degE7">EKF home latitude, expressed as degrees * 1E7</field>
+      <field type="int32_t" name="home_lon" units="degE7">EKF home longitude, expressed as degrees * 1E7</field>
+      <field type="int32_t" name="home_alt" units="mm">EKF home altitude in meters, expressed as * 1000 (millimeters), AMSL (not WGS84 - note that virtually all GPS modules provide the AMSL as well)</field>
+    </message>
   </messages>
 </mavlink>
