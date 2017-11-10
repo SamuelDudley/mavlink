@@ -1496,5 +1496,29 @@
       <field name="AOA" type="float">Angle of Attack (degrees)</field>
       <field name="SSA" type="float">Side Slip Angle (degrees)</field>
     </message>
+    </message>
+    <!-- External Navigation Sensor Input message -->
+    <message id="11021" name="EXT_NAV">
+      <description>local frame external position and attitude estimate</description>
+      <field type="uint8_t" name="target_system">System ID</field>
+      <field type="uint8_t" name="target_component">Component ID</field>
+      <field type="uint64_t" name="time_usec">Timestamp (micros since boot or Unix epoch)</field>
+      <field type="uint32_t" name="time_measurement_msec">Autopilot system time that the measurement for this estimate was taken (mSec)</field>
+      <field type="uint32_t" name="time_reset_msec">Autopilot system time when the last estimate reset was requested (mSec)</field>
+      <field type="float" name="pos_x">X position in the RH navigation frame. Frame is assumed to be NED if frame_is_NED is 1. Units are meters if scale_unknown is 0 </field>
+      <field type="float" name="pos_y">Y position in the RH navigation frame. Frame is assumed to be NED if frame_is_NED is 1. Units are meters if scale_unknown is 0 </field>
+      <field type="float" name="pos_z">Z position in the RH navigation frame. Frame is assumed to be NED if frame_is_NED is 1. Units are meters if scale_unknown is 0 </field>
+      <field type="float" name="quat_q1">Quaternion component desribing the the rotation from navigation frame to body frame </field>
+      <field type="float" name="quat_q2">Quaternion component desribing the the rotation from navigation frame to body frame </field>
+      <field type="float" name="quat_q3">Quaternion component desribing the the rotation from navigation frame to body frame </field>
+      <field type="float" name="quat_q4">Quaternion component desribing the the rotation from navigation frame to body frame </field>
+      <field type="float" name="pos_error">1-sigma spherical position error. Units are meters if scale_unknown is 0</field>
+      <field type="float" name="ang_error">1-sigma spherical angle error (rad)</field>
+      <field type="float" name="offset_x">X position offset of the external navigation sensor in body frame (m)</field>
+      <field type="float" name="offset_y">Y position offset of the external navigation sensor in body frame (m)</field>
+      <field type="float" name="offset_z">Z position offset of the external navigation sensor in body frame (m)</field>
+      <field type="uint8_t" name="scale_unknown">Set to 1 when the position scaling is unknown or not in metres, otherwise 0</field>
+      <field type="uint8_t" name="frame_is_NED">Set to 1 when if the external mavigaton system is using a NED coordinate frame, otherwise 0</field>
+    </message>
   </messages>
 </mavlink>
