@@ -1496,7 +1496,6 @@
       <field name="AOA" type="float">Angle of Attack (degrees)</field>
       <field name="SSA" type="float">Side Slip Angle (degrees)</field>
     </message>
-    </message>
     <!-- External Navigation Sensor Input message -->
     <message id="11021" name="EXT_NAV">
       <description>local frame external position and attitude estimate</description>
@@ -1519,6 +1518,12 @@
       <field type="float" name="offset_z">Z position offset of the external navigation sensor in body frame (m)</field>
       <field type="uint8_t" name="scale_unknown">Set to 1 when the position scaling is unknown or not in metres, otherwise 0</field>
       <field type="uint8_t" name="frame_is_NED">Set to 1 when if the external mavigaton system is using a NED coordinate frame, otherwise 0</field>
+    </message>
+    <message id="11022" name="test">
+      <description>a test message to produce a CRC error</description>
+      <field type="uint64_t" name="time_usec">timestamp</field>
+      <field name="field1" type="float">test field 1</field>
+      <field name="field2" type="float">test field 2</field>
     </message>
   </messages>
 </mavlink>
